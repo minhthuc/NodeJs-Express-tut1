@@ -1,20 +1,20 @@
 var express = require('express');
+var forturn = require("./lib/fortunes")
 var app = express();
 
 var handlebars = require('express3-handlebars') .create({ defaultLayout:'main' });
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-
-app.set('port', process.env.PORT || 3000);
 app.set(express.static(__dirname+'/public'));
+app.set('port', process.env.PORT || 3000);
+
 app.get('/', function(req, res){
     res.render('layouts/home')
 });
 
 app.get('/about', function(req, res){
-    res.render('layouts/about')
+    res.render('layouts/about', {fortune: forturn.getFortune()})
 });
-
 
 // custom 404 page
 app.use(function(req, res){ res.type('text/plain');
@@ -29,5 +29,5 @@ app.use(function(err, req, res, next){
 app.listen(app.get('port'), function(){
     console.log( 'Express started on http://localhost:' +
         app.get('port') + '; press Ctrl-C to terminate.\n' +
-        __dirname );
+        __dirname+'/public' );
 });
